@@ -72,7 +72,7 @@ $(document).ready(function() {
   $( "#zipForm" ).submit(function( event ) {
       $(".repDisplay").remove()
     console.log("test")
-    var zip = $("#zip" ).val()
+    var zip = encodeURIComponent($("#zip" ).val())
     $("#zip" ).val("")
     getData(zip);
       event.preventDefault();
