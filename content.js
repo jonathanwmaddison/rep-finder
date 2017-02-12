@@ -1,5 +1,6 @@
 
 
+
 function getData (zip) {
   var key = "AIzaSyCZJ6S0JHvG9JwJWVK6H0ujFwBM0IXX0jw";
   var address = zip;
@@ -7,7 +8,6 @@ function getData (zip) {
   var count=0
   var data;
   var appendData = "";
-
   $.getJSON(url, function(data){
     console.log(data);
     appendData+="<div class=\"repDisplay\">"  ;
@@ -20,14 +20,13 @@ function getData (zip) {
       appendData +="<div class=division><h1>"+data.divisions[division].name+"</h1>";
       data.divisions[division].officeIndices.forEach(function(office){
         data.offices[office].officialIndices.forEach(function(official){
-          var officialName = "";
+          var officialName = data.officials[official].name +" (" + data.officials[official].party[0] +") ";
           var officialContact = "";
           var officialPhone = "";
           var website = "";
           var photo = "";
           var socialMedia="<div class=\"col-sm-3\"><h4> Social Media</h4><ul>";
-
-          officialName = data.officials[official].name +" (" + data.officials[official].party[0] +") ";
+          var newsButton =  "<br><button id=\"" + encodeURIComponent(data.officials[official].name) + "\" type=\"submit\" class=\"btn btn-lg btn-danger get-news\" data-toggle=\"popover\" title=\"Recent News\" data-content=\"\">Get News</button>";
           if (data.officials[official].phones) {
             officialPhone = "<div class=\"phone\"> Phone: " + data.officials[official].phones[0] + "</div>"
           }
@@ -46,35 +45,63 @@ function getData (zip) {
             website = "<div class=\" website\"><p><a href=\"" + data.officials[official].urls[0] + "\"> Website </a></p></div>";
           }
           
-          appendData +="<div class=\"rep\"><h3 class=\"position\">"+data.offices[office].name+": " + officialName + "</h3>"
+          appendData +="<div class=\"rep\"><h3 class=\"position\">"+data.offices[office].name+": " + officialName + "</h3>";
           
           if(data.officials[official].photoUrl) {
             photo=data.officials[official].photoUrl;
             appendData += "<div class=\"row\"><div class=\" col-sm-3 photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-thumbnail\"></div>"
           } else {
             photo = "http://i.imgur.com/iMTIAcQ.jpg"
-            appendData += "<div class=\"row\"><div class=\" col-sm-3 photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\" img-thumbnail\"></div>"
+            appendData += "<div class=\"row\"><div class=\" col-sm-3 photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\" img-thumbnail\">"+newsButton+"</div>"
           }
-          appendData+="<div class=\" col-sm-3 address\"> <h4> Mailing Address </h4><p>"+officialContact+ "</p></div><div class=\" contact col-sm-3\"><h4> Contact </h4> <p>" +officialPhone + website + " </p></div>"+socialMedia+"</div></div>"
+          appendData+="<div class=\" col-sm-3 address\"> <h4> Mailing Address </h4><p>" + officialContact + "</p></div><div class=\" contact col-sm-3\"><h4> Contact </h4> <p>" +officialPhone + website + " </p></div>"+socialMedia+"</div></div>"
         })
       })      
     }
     appendData+="</div>"
     $(".container").append(appendData);
+    
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+    $( ".get-news" ).on( "click", function() {
+      getNews( $( this ).attr("id") );
+    });
     localStorage['append'] = appendData;
   }) 
 }
 
+function getNews(id) {
+  
+  var googleNewsRss= "https://news.google.com/news?search="+id+"&output=rss";
+  
+  $.ajax({
+    type: "GET",
+    headers: {
+      "Access-Control-Allow-Origin": 1,
+  },
+    url: googleNewsRss
+    }).done(function (data) {
+      console.log(data);
+    });
+}
+
 $(document).ready(function() {
   if(localStorage["append"]) {
-  $(".container").append(localStorage["append"]);
-}
+    $(".container").append(localStorage["append"]);
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+  }
+  $( ".get-news" ).on( "click", function() {
+    getNews($( this ).attr("id") );
+  });
   $( "#zipForm" ).submit(function( event ) {
       $(".repDisplay").remove()
     console.log("test")
-    var zip = encodeURIComponent($("#zip" ).val())
+    var zip = $("#zip" ).val()
     $("#zip" ).val("")
     getData(zip);
       event.preventDefault();
   });
-})
+});
