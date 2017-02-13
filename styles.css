@@ -15,3 +15,12 @@ ul{
 	width: 4rem;
 	padding-right: 1rem;
 }
+.panel-group{
+	padding: 1.5rem
+}
+.glyphicon-menu-hamburger{
+	font-size: 1rem;
+}
+.address h4, .contact h4, .social-media h4 {
+	
+}

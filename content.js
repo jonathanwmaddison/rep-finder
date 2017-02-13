@@ -64,7 +64,7 @@ function formatContact(official){
   return "<div class=\" contact "+ columnSize +"\"><h4> Contact </h4> <p>" +officialPhone + website + " </p></div>"
 }
 function formatSocial(official) {
-  var socialMedia="<div class=\""+ columnSize +"\"><h4> Social Media</h4><ul>";
+  var socialMedia="<div class=\"social-media "+ columnSize +"\"><h4> Social Media</h4><ul>";
   if (official.channels) {
     official.channels.forEach(function(channel){
       socialMedia+=formatSocialButton(channel) 
@@ -77,7 +77,7 @@ function formatSocial(official) {
   return socialMedia;
 }
 function formatNews(official, id){
-  return "<div class=\"row\"><div class=\"panel-group\" id=\""+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" role=\"tablist\" aria-multiselectable=\"true\"><div class=\"panel panel-default\"><div class=\"panel-heading\" role=\"tab\" id=\"heading"+id+"\"><h4 class=\"panel-title\"><a role=\"button\" data-toggle=\"collapse\" data-parent=\"#"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" href=\"#collapse"+id+"\" aria-expanded=\"true\" aria-controls=\"collapse"+id+"\">News</a></h4></div><div id=\"collapse"+id+"\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOn\"><div class= \"panel-body\"id=\"text"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\"></div></div></div></div></div>"
+  return "<div class=\"row\"><div class=\"panel-group\" id=\""+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" role=\"tablist\" aria-multiselectable=\"true\"><div class=\"panel panel-default\"><div class=\"panel-heading\" role=\"tab\" id=\"heading"+id+"\"><h4 class=\"panel-title\"><a role=\"button\" data-toggle=\"collapse\" data-parent=\"#"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" href=\"#collapse"+id+"\" aria-expanded=\"true\" aria-controls=\"collapse"+id+"\">News <span class=\"pull-right glyphicon glyphicon-menu-hamburger\"></span></a></h4></div><div id=\"collapse"+id+"\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOn\"><div class= \"panel-body\"id=\"text"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\"></div></div></div></div></div>"
 }
 /////////////////////End Helper functions
 
