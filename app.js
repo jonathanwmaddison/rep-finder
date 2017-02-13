@@ -1,4 +1,3 @@
-
 function getData (zip) {
   var key = "AIzaSyCZJ6S0JHvG9JwJWVK6H0ujFwBM0IXX0jw";
   var address = zip;
