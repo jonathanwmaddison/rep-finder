@@ -1,5 +1,7 @@
+//Bootstrap col size for address,photo, etc. In case it needs to be adjusted.
+var columnSize = "col-sm-3";
 
-
+//store data from representative search. Google civic info API provides data!
 
 function getData (zip) {
   var key = "AIzaSyCZJ6S0JHvG9JwJWVK6H0ujFwBM0IXX0jw";
@@ -7,76 +9,114 @@ function getData (zip) {
   var url = "https://www.googleapis.com/civicinfo/v2/representatives?address="+address+"&key="+key;
   var count=0
   var data;
-  var appendData = "";
   var collapseId=0;
   $.getJSON(url, function(data){
-    console.log(data);
-    appendData+="<div class=\"repDisplay\">"  ;
-    for (division in data.divisions) {
-      appendData +="<div class=division><h1>"+data.divisions[division].name+"</h1>";
-      data.divisions[division].officeIndices.forEach(function(office){
-        data.offices[office].officialIndices.forEach(function(official){
-          var officialName = data.officials[official].name +" (" + data.officials[official].party[0] +") ";
-          var officialContact = "";
-          var officialPhone = "";
-          var website = "";
-          var photo = "";
-          var socialMedia="<div class=\"col-sm-3\"><h4> Social Media</h4><ul>";
-          var newsButton =  "<div class=\"row\"><div class=\"panel-group\" id=\""+ data.officials[official].name.replace(/ /g,"-").replace(/\./g,"_")+"\" role=\"tablist\" aria-multiselectable=\"true\"><div class=\"panel panel-default\"><div class=\"panel-heading\" role=\"tab\" id=\"heading"+collapseId+"\"><h4 class=\"panel-title\"><a role=\"button\" data-toggle=\"collapse\" data-parent=\"#"+ data.officials[official].name.replace(/ /g,"-").replace(/\./g,"_")+"\" href=\"#collapse"+collapseId+"\" aria-expanded=\"true\" aria-controls=\"collapse"+collapseId+"\">News</a></h4></div><div id=\"collapse"+collapseId+"\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOn\"><div class= \"panel-body\"id=\"text"+ data.officials[official].name.replace(/ /g,"-").replace(/\./g,"_")+"\"></div></div></div></div></div>"
-          collapseId++;
-          if (data.officials[official].phones) {
-            officialPhone = "<div class=\"phone\"> Phone: " + data.officials[official].phones[0] + "</div>"
-          }
-          if (data.officials[official].channels) {
-            socialMedia += data.officials[official].channels[0] ? "<li>"+ data.officials[official].channels[0].type +": "+ data.officials[official].channels[0].id + "</li>" : "";
-            socialMedia += data.officials[official].channels[1] ? "<li>"+ data.officials[official].channels[1].type +": "+ data.officials[official].channels[1].id + "</li>" : "";
-            socialMedia += data.officials[official].channels[2] ? "<li>"+ data.officials[official].channels[2].type +": "+ data.officials[official].channels[2].id + "</li>" : "";
-            socialMedia+="</ul></div>";
-          }
-          else {
-            socialMedia+="</div>"
-          }
-          if(data.officials[official].address) {
-            officialContact += data.officials[official].address[0].line1 ? data.officials[official].address[0].line1 + ", " : "";
-            officialContact += data.officials[official].address[0].line2 ? data.officials[official].address[0].line2 + ", "  : "";
-            officialContact += data.officials[official].address[0].city + ", " + data.officials[official].address[0].state + "&nbsp;&nbsp;" + data.officials[official].address[0].zip
-          }
-          if(data.officials[official].urls) {
-            website = "<div class=\" website\"><p><a href=\"" + data.officials[official].urls[0] + "\"> Website </a></p></div>";
-          }
-          
-          appendData +="<div class=\"rep\"><h3 class=\"position\">"+data.offices[office].name+": " + officialName + "</h3>";
-          
-          if(data.officials[official].photoUrl) {
-            photo=data.officials[official].photoUrl;
-            appendData += "<div class=\"row\"><div class=\" col-sm-3 photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-thumbnail\"></div>"
-          } else {
-            photo = "http://i.imgur.com/iMTIAcQ.jpg"
-            appendData += "<div class=\"row\"><div class=\" col-sm-3 photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\" img-thumbnail\"></div>"
-          }
-          appendData+="<div class=\" col-sm-3 address\"> <h4> Mailing Address </h4><p>" + officialContact + "</p></div><div class=\" contact col-sm-3\"><h4> Contact </h4> <p>" +officialPhone + website + " </p></div>"+socialMedia+"</div>"+newsButton+"</div>"
-        })
+    formatAndAppend(data)
+  })
+}
+// Helper functions to format data
+function formatName(official) {
+  return "<div class=\"rep\"><h3 class=\"position\">"+official.name+": " + official.name +" (" + official.party[0] +") </h3>";
+}
+function formatPhoto(official){
+  if(official.photoUrl) {
+    var photo=official.photoUrl;
+    return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-thumbnail\"></div>"
+  } else {
+    var photo = "http://i.imgur.com/iMTIAcQ.jpg"
+    return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\" img-thumbnail\"></div>"      }
+}
+function formatAddress(official){
+  var address=""
+  if(official.address) {
+    address += official.address[0].line1 ? official.address[0].line1 + ", " : "";
+    address += official.address[0].line2 ? official.address[0].line2 + ", "  : "";
+    address += official.address[0].city + ", " + official.address[0].state + "&nbsp;&nbsp;" + official.address[0].zip
+  }
+  return "<div class=\" "+ columnSize +" address\"> <h4> Mailing Address </h4><p>" + address + "</p></div>";
+}
+function formatContact(official){
+  var website ="";
+  var officialPhone="";
+  if(official.urls) {
+    website = "<div class=\" website\"><p><a href=\"" + official.urls[0] + "\"> Website </a></p></div>";
+  }
+  if (official.phones) {
+    officialPhone = "<div class=\"phone\"> Phone: " + official.phones[0] + "</div>"
+  }
+  return "<div class=\" contact "+ columnSize +"\"><h4> Contact </h4> <p>" +officialPhone + website + " </p></div>"
+}
+function formatSocial(official) {
+  var socialMedia="<div class=\""+ columnSize +"\"><h4> Social Media</h4><ul>";
+  if (official.channels) {
+    socialMedia += official.channels[0] ? "<li>"+ official.channels[0].type +": "+ official.channels[0].id + "</li>" : "";
+    socialMedia += official.channels[1] ? "<li>"+ official.channels[1].type +": "+ official.channels[1].id + "</li>" : "";
+    socialMedia += official.channels[2] ? "<li>"+ official.channels[2].type +": "+ official.channels[2].id + "</li>" : "";
+    socialMedia+="</ul></div>";
+  }
+  else {
+    socialMedia+="</div>"
+  }
+  return socialMedia;
+}
+function formatNews(official, id){
+  return "<div class=\"row\"><div class=\"panel-group\" id=\""+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" role=\"tablist\" aria-multiselectable=\"true\"><div class=\"panel panel-default\"><div class=\"panel-heading\" role=\"tab\" id=\"heading"+id+"\"><h4 class=\"panel-title\"><a role=\"button\" data-toggle=\"collapse\" data-parent=\"#"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" href=\"#collapse"+id+"\" aria-expanded=\"true\" aria-controls=\"collapse"+id+"\">News</a></h4></div><div id=\"collapse"+id+"\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOn\"><div class= \"panel-body\"id=\"text"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\"></div></div></div></div></div>"
+}
+//Utilizes data from google and helper functions to format data for display.
+function formatAndAppend (data) {
+  var appendData = "";
+  collapseId=0;
+  console.log(data);
+  appendData+="<div class=\"repDisplay\">";
+  for (division in data.divisions) {
+    appendData +="<div class=division><h1>"+data.divisions[division].name+"</h1>";
+    data.divisions[division].officeIndices.forEach(function(office){
+      data.offices[office].officialIndices.forEach(function(official){
+        var name = formatName(data.officials[official])
+        var photo = formatPhoto(data.officials[official])
+        var address = formatAddress(data.officials[official])
+        var contact = formatContact(data.officials[official])
+        var socialMedia = formatSocial(data.officials[official])
+        var newsButton = formatNews(data.officials[official], collapseId)
+        console.log(name)
+
+        //id counter for newsButton that ensures each accordian panel is unique
+        collapseId++;
+        
+        //compile all data
+        appendData+= name + photo + address + contact + socialMedia + "</div>";
+
+        //close out official with NewsButton
+        appendData+=newsButton
       })
-    appendData+="</div>" 
-    }
+      //close out office
+    })
+    //close out division
     appendData+="</div>"
-    $(".container").append(appendData);
-    $( ".panel-group" ).on( "click", function() {
+  }
+  //close out repDisplay
+  appendData+="</div>" 
+  localStorage["append"] = appendData;
+
+  $(".container").append(appendData);
+  $( ".panel-group" ).on( "click", function() {
       getNews( $( this ).attr("id") );
     });
-    localStorage['append'] = appendData;
-  }) 
 }
+
+//grabs news from NY times API
 
 function getNews(id) {
   if($("#content"+id).length>0) {
      return
   }
+  console.log(id.replace(/-/g,"+").replace(/_/g,""))
   var contentForDisplay = "<span id=\"content"+ id +"\"><ol>";
   var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+
   url += '?' + $.param({
     'api-key': "b3947cbe5bfb4ffeac69be6569aa335f",
-    'q': encodeURIComponent(id.replace(/-/g," ").replace(/_/g,".")),
+    'q': id.replace(/-/g,"+").replace(/_/g,""),
     'sort': "newest"
   });
   $.ajax({
@@ -92,18 +132,23 @@ function getNews(id) {
   });   
 }
 
+//Functions that run once the document is loaded
 $(document).ready(function() {
+
+  //see if data is stored and if so, format data from stored data.
   if(localStorage["append"]) {
-    $(".container").append(localStorage["append"]);
+    $(".container").append(localStorage["append"])
   }
+  // event listener for panel groups
   $( ".panel-group" ).on( "click", function() {
     getNews($( this ).attr("id") );
   });
+  // event listener for rep search form
   $( "#zipForm" ).submit(function( event ) {
       $(".repDisplay").remove()
     var zip = $("#zip" ).val()
     $("#zip" ).val("")
     getData(zip);
-      event.preventDefault();
+    event.preventDefault();
   });
 });
