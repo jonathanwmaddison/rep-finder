@@ -17,17 +17,17 @@ function getData (zip) {
 ///////// Helper functions to format data ////////
 function formatSocialButton (channel){
   if(channel.type === "Facebook") {
-    return  "<a target=\"_blank\" href =\"https://www.facebook.com/"+ channel.id +"/\"><img  class=\"socialIcon\" src=\"./images/"+ channel.type+".svg\"></a></li>"
+    return  "<a target=\"_blank\" href =\"https://www.facebook.com/"+ channel.id +"/\"><img  class=\"socialIcon\" src=\"images/"+ channel.type+".svg\"></a></li>"
   }
   else if (channel.type === "Twitter"){
-    return  "<a target=\"_blank\" href =\"https://www.twitter.com/"+ channel.id +"/\"><img  class=\"socialIcon\" src=\"./images/"+ channel.type+".svg\"></a></li>"
+    return  "<a target=\"_blank\" href =\"https://www.twitter.com/"+ channel.id +"/\"><img  class=\"socialIcon\" src=\"images/"+ channel.type+".svg\"></a></li>"
 
   }
   else if (channel.type === "YouTube"){
-    return  "<a target=\"_blank\" href =\"https://www.youtube.com/user/"+ channel.id +"/\"><img  class=\"socialIcon\" src=\"./images/"+ channel.type+".svg\"></a></li>"
+    return  "<a target=\"_blank\" href =\"https://www.youtube.com/user/"+ channel.id +"/\"><img  class=\"socialIcon\" src=\"images/"+ channel.type+".svg\"></a></li>"
   }
   else if (channel.type === "GooglePlus"){
-    return  "<a target=\"_blank\" href =\"https://plus.google.com/"+ channel.id +"\"><img  class=\"socialIcon\" src=\"./images/"+ channel.type+".svg\"></a></li>"
+    return  "<a target=\"_blank\" href =\"https://plus.google.com/"+ channel.id +"\"><img  class=\"socialIcon\" src=\"images/"+ channel.type+".svg\"></a></li>"
   } else {
     return  channel.type + ": " + channel.id;
   }
