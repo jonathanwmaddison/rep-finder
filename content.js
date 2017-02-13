@@ -14,7 +14,24 @@ function getData (zip) {
     formatAndAppend(data)
   })
 }
-// Helper functions to format data
+///////// Helper functions to format data ////////
+function formatSocialButton (channel){
+  if(channel.type === "Facebook") {
+    return  "<a target=\"_blank\" href =\"https://www.facebook.com/"+ channel.id +"/\"><img  class=\"socialIcon\" src=\"./images/"+ channel.type+".svg\"></a></li>"
+  }
+  else if (channel.type === "Twitter"){
+    return  "<a target=\"_blank\" href =\"https://www.twitter.com/"+ channel.id +"/\"><img  class=\"socialIcon\" src=\"./images/"+ channel.type+".svg\"></a></li>"
+
+  }
+  else if (channel.type === "YouTube"){
+    return  "<a target=\"_blank\" href =\"https://www.youtube.com/user/"+ channel.id +"/\"><img  class=\"socialIcon\" src=\"./images/"+ channel.type+".svg\"></a></li>"
+  }
+  else if (channel.type === "GooglePlus"){
+    return  "<a target=\"_blank\" href =\"https://plus.google.com/"+ channel.id +"\"><img  class=\"socialIcon\" src=\"./images/"+ channel.type+".svg\"></a></li>"
+  } else {
+    return  channel.type + ": " + channel.id;
+  }
+}
 function formatName(official) {
   return "<div class=\"rep\"><h3 class=\"position\">"+official.name+": " + official.name +" (" + official.party[0] +") </h3>";
 }
@@ -39,7 +56,7 @@ function formatContact(official){
   var website ="";
   var officialPhone="";
   if(official.urls) {
-    website = "<div class=\" website\"><p><a href=\"" + official.urls[0] + "\"> Website </a></p></div>";
+    website = "<div class=\" website\"><p><a target=\"_blank\" href=\"" + official.urls[0] + "\"> Website </a></p></div>";
   }
   if (official.phones) {
     officialPhone = "<div class=\"phone\"> Phone: " + official.phones[0] + "</div>"
@@ -49,9 +66,9 @@ function formatContact(official){
 function formatSocial(official) {
   var socialMedia="<div class=\""+ columnSize +"\"><h4> Social Media</h4><ul>";
   if (official.channels) {
-    socialMedia += official.channels[0] ? "<li>"+ official.channels[0].type +": "+ official.channels[0].id + "</li>" : "";
-    socialMedia += official.channels[1] ? "<li>"+ official.channels[1].type +": "+ official.channels[1].id + "</li>" : "";
-    socialMedia += official.channels[2] ? "<li>"+ official.channels[2].type +": "+ official.channels[2].id + "</li>" : "";
+    official.channels.forEach(function(channel){
+      socialMedia+=formatSocialButton(channel) 
+    })
     socialMedia+="</ul></div>";
   }
   else {
@@ -62,6 +79,8 @@ function formatSocial(official) {
 function formatNews(official, id){
   return "<div class=\"row\"><div class=\"panel-group\" id=\""+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" role=\"tablist\" aria-multiselectable=\"true\"><div class=\"panel panel-default\"><div class=\"panel-heading\" role=\"tab\" id=\"heading"+id+"\"><h4 class=\"panel-title\"><a role=\"button\" data-toggle=\"collapse\" data-parent=\"#"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" href=\"#collapse"+id+"\" aria-expanded=\"true\" aria-controls=\"collapse"+id+"\">News</a></h4></div><div id=\"collapse"+id+"\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOn\"><div class= \"panel-body\"id=\"text"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\"></div></div></div></div></div>"
 }
+/////////////////////End Helper functions
+
 //Utilizes data from google and helper functions to format data for display.
 function formatAndAppend (data) {
   var appendData = "";
@@ -124,7 +143,7 @@ function getNews(id) {
     method: 'GET',
   }).done(function(result) {
     result.response.docs.forEach(function (article) {
-      contentForDisplay += "<li><a href="+ article.web_url+">"+ article.headline.main+"</a></li>"
+      contentForDisplay += "<li><a href="+ article.web_url+" target=\"_blank\">"+ article.headline.main+"</a></li>"
     })
     $("#text"+id).append(contentForDisplay+"</ol></span>");
   }).fail(function(err) {
