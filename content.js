@@ -17,6 +17,7 @@ function getData (zip) {
 ///////// Helper functions to format data ////////
 function formatSocialButton (channel){
   if(channel.type === "Facebook") {
+    console.log(channel.type.toLowerCase())
     return  "<a target=\"_blank\" href =\"https://www.facebook.com/"+ channel.id +"/\"><img  class=\"socialIcon\" src=\"images/"+ channel.type.toLowerCase()+".svg\"></a></li>"
   }
   else if (channel.type === "Twitter"){
@@ -85,7 +86,6 @@ function formatNews(official, id){
 function formatAndAppend (data) {
   var appendData = "";
   collapseId=0;
-  console.log(data);
   appendData+="<div class=\"repDisplay\">";
   for (division in data.divisions) {
     appendData +="<div class=division><h1>"+data.divisions[division].name+"</h1>";
@@ -97,8 +97,6 @@ function formatAndAppend (data) {
         var contact = formatContact(data.officials[official])
         var socialMedia = formatSocial(data.officials[official])
         var newsButton = formatNews(data.officials[official], collapseId)
-        console.log(name)
-
         //id counter for newsButton that ensures each accordian panel is unique
         collapseId++;
         
