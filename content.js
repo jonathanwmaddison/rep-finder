@@ -41,7 +41,11 @@ function formatPhoto(official){
     var photo=official.photoUrl;
     return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-thumbnail\"></div>"
   } else {
-    var photo = "http://i.imgur.com/iMTIAcQ.jpg"
+      if (official.name === "Donald J. Trump") {
+        var photo = "https://peopledotcom.files.wordpress.com/2016/10/trump-baldwin-800-1.jpg";
+      } else {
+        var photo = "http://i.imgur.com/iMTIAcQ.jpg"
+      }
     return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\" img-thumbnail\"></div>"      }
 }
 function formatAddress(official){
@@ -60,7 +64,7 @@ function formatContact(official){
     website = "<div class=\" website\"><p><a target=\"_blank\" href=\"" + official.urls[0] + "\"> Website </a></p></div>";
   }
   if (official.phones) {
-    officialPhone = "<div class=\"phone\"> Phone: " + official.phones[0] + "</div>"
+    officialPhone = "<div class=\"phone\"><a href=\"tel:" + official.phones[0] + "\"</a>+" + official.phones[0] + "</div>"
   }
   return "<div class=\" contact "+ columnSize +"\"><h4> Contact </h4> <p>" +officialPhone + website + " </p></div>"
 }
