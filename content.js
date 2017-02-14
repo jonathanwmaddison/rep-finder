@@ -113,7 +113,7 @@ function formatNews(official, id, twitterHandle){
   } else {
     size = panelSize
   }
-  return "<div class=\""+size+" expand-row\"><div class=\"panel-group news-search\" id=\""+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" role=\"tablist\" aria-multiselectable=\"true\"><div class=\"panel panel-default\"><div class=\"panel-heading\" role=\"tab\" id=\"heading"+id+"\"><h4 class=\"panel-title\"><a class=\"panel-link\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" href=\"#collapse"+id+"\" aria-expanded=\"true\" aria-controls=\"collapse"+id+"\"><span class=\"news-button-text\"> News <span class=\" glyphicon glyphicon-menu-hamburger\"></span></span></a></h4></div><div id=\"collapse"+id+"\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOn\"><div class= \"panel-body\"id=\"text"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\"></div></div></div></div></div>"
+  return "<div class=\""+size+" expand-row\"><div class=\" panel-group news-search\" id=\""+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" role=\"tablist\" aria-multiselectable=\"true\"><div class=\"panel panel-default\"><div class=\"panel-heading\" role=\"tab\" id=\"heading"+id+"\"><h4 class=\"panel-title\"><a class=\"panel-link\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" href=\"#collapse"+id+"\" aria-expanded=\"true\" aria-controls=\"collapse"+id+"\"><span class=\"news-button-text\"> News <span class=\" glyphicon glyphicon-menu-hamburger\"></span></span></a></h4></div><div id=\"collapse"+id+"\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOn\"><div class= \"panel-body\"id=\"text"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\"></div></div></div></div></div>"
 }
 function formatTwitter(official, id){
   return "<div class=\""+panelSize+" expand-row\"><div class=\"panel-group twitter-feed\" id=\""+ twitterHandle+"\" role=\"tablist\" aria-multiselectable=\"true\"><div class=\"panel panel-default\"><div class=\"panel-heading\" role=\"tab\" id=\"twitterheading"+id+"\"><h4 class=\"panel-title\"><a class=\"panel-link\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#"+ twitterHandle+"\" href=\"#collapse"+id+"\" aria-expanded=\"true\" aria-controls=\"collapse"+id+"\"><span class=\"news-button-text\"> Recent Tweets <span class=\" glyphicon glyphicon-menu-hamburger\"></span></span></a></h4></div><div id=\"collapse"+id+"\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOn\"><div class= \"panel-body\"id=\"embed"+ twitterHandle+"\"></div></div></div></div></div>"
@@ -150,17 +150,21 @@ function formatAndAppend (data) {
         appendData+= name + photo + address + contact + socialMedia + "</div>";
 
         //close out official with NewsButton
-        appendData+="<div class=\"row tweetandnewsrow\">"+newsButton 
+        appendData+="<div class=\"row tweetandnewsrow\">"+newsButton
+
         if(twitterHandle != "") {
           var twitterButton= formatTwitter(data.officials[official], collapseId)
           appendData += twitterButton +"</div>";
+          collapseId++;
         } else {
-          appendData += "</div>";
+        appendData+="</div>";
         }
+        appendData+="</div>"
       })
       //close out office
-      appendData+="</div>"
+      //appendData+="</div>"
     })
+
   }
     //close out division
     appendData+="</div>"
