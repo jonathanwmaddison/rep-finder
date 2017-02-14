@@ -10,8 +10,9 @@ function getData (address) {
   var count=0
   var data;
   $.getJSON(url, function(data){
+    localStorage["data"] = JSON.stringify(data);
     formatAndAppend(data)
-    console.log(data, "test")
+
   })
 }
 ///////// Helper functions to format data ////////
@@ -39,7 +40,7 @@ function formatName(official, office) {
 function formatPhoto(official){
   if(official.photoUrl) {
     var photo=official.photoUrl;
-    return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-thumbnail\"></div>"
+    return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-crop\"></div>"
   } else {
       if (official.name === "Donald J. Trump") {
         var photo = "https://peopledotcom.files.wordpress.com/2016/10/trump-baldwin-800-1.jpg";
@@ -50,7 +51,7 @@ function formatPhoto(official){
       else {
         var photo = "http://i.imgur.com/iMTIAcQ.jpg"
       }
-    return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\" img-thumbnail\"></div>"      }
+    return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-crop\"></div>"      }
 }
 function formatAddress(official){
   var address=""
@@ -172,9 +173,10 @@ $(document).ready(function() {
   autocomplete = new google.maps.places.Autocomplete(input);
 
   //see if data is stored and if so, format data from stored data.
-  // if(localStorage["append"]) {
-  //   $(".container").append(localStorage["append"])
-  // }
+  if(localStorage["data"]) {
+    formatAndAppend(JSON.parse(localStorage["data"]))
+  }
+
   // event listener for panel groups
   $( ".panel-group" ).on( "click", function() {
     getNews($( this ).attr("id") );

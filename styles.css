@@ -22,5 +22,18 @@ ul{
 	font-size: 1rem;
 }
 .address h4, .contact h4, .social-media h4 {
-	
+
+}
+.photo {
+
+
+}
+.img-crop {
+	object-fit: contain;
+}
+#repPhoto {
+	height: 15rem; background-color: white; 
+}
+#repPhoto[class] {
+	width: 15rem;
 }
