@@ -16,16 +16,22 @@ ul{
 	padding-right: 1rem;
 }
 .panel-group{
-	padding: 1.5rem
+	padding: 1rem
+}
+.panel-heading {
+	padding: 0;
+	height: 3.5rem;
 }
 .glyphicon-menu-hamburger{
 	font-size: 1rem;
 }
-.address h4, .contact h4, .social-media h4 {
-
+@media (max-width: 768px) {
+    .address, .contact, .social-media, .panel-link  {
+        text-align: center;
+    }
 }
-.photo {
 
+.photo {
 
 }
 .img-crop {
@@ -39,4 +45,20 @@ ul{
 }
 .panel-link {
 	display: block;
+	height: 3.6rem;
+}
+.news-button-text{
+	display: block;
+	padding-top: .5rem;
+	padding-left: 1rem;
+}
+.panel-body{
+	height: 38rem;
+}
+.panel:hover{
+	border: .1rem solid grey;
+
+}
+.expand-row{
+
 }
