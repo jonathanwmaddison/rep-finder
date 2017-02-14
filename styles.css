@@ -37,3 +37,6 @@ ul{
 #repPhoto[class] {
 	width: 15rem;
 }
+.panel-link {
+	display: block;
+}
