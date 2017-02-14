@@ -38,20 +38,21 @@ function formatName(official, office) {
   return "<div class=\"rep\"><h3 class=\"position\">"+office+": " + official.name +" (" + official.party[0] +") </h3>";
 }
 function formatPhoto(official){
+  var photo =""
   if(official.photoUrl) {
-    var photo=official.photoUrl;
-    return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-crop\"></div>"
+     photo=official.photoUrl;
   } else {
       if (official.name === "Donald J. Trump") {
-        var photo = "https://peopledotcom.files.wordpress.com/2016/10/trump-baldwin-800-1.jpg";
+        photo = "https://peopledotcom.files.wordpress.com/2016/10/trump-baldwin-800-1.jpg";
       } 
       else if (official.name === "Mike Pence") {
-        var photo = "https://typeset-beta.imgix.net/2016%2F7%2F14%2F471131090.jpg"
+        photo = "https://typeset-beta.imgix.net/2016%2F7%2F14%2F471131090.jpg"
       }
       else {
-        var photo = "http://i.imgur.com/iMTIAcQ.jpg"
+        photo = "http://i.imgur.com/iMTIAcQ.jpg"
       }
-    return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-crop\"></div>"      }
+    }
+    return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-crop center-block\"></div>";
 }
 function formatAddress(official){
   var address=""
