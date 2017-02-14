@@ -3,15 +3,15 @@ var columnSize = "col-sm-3";
 
 //store data from representative search. Google civic info API provides data!
 
-function getData (zip) {
+function getData (address) {
+  console.log(address);
   var key = "AIzaSyCZJ6S0JHvG9JwJWVK6H0ujFwBM0IXX0jw";
-  var address = zip;
-  var url = "https://www.googleapis.com/civicinfo/v2/representatives?address="+address+"&key="+key;
+  var url = "https://www.googleapis.com/civicinfo/v2/representatives?address="+encodeURIComponent(address)+"&key="+key;
   var count=0
   var data;
-  var collapseId=0;
   $.getJSON(url, function(data){
     formatAndAppend(data)
+    console.log(data, "test")
   })
 }
 ///////// Helper functions to format data ////////
@@ -33,8 +33,8 @@ function formatSocialButton (channel){
     return  channel.type + ": " + channel.id;
   }
 }
-function formatName(official) {
-  return "<div class=\"rep\"><h3 class=\"position\">"+official.name+": " + official.name +" (" + official.party[0] +") </h3>";
+function formatName(official, office) {
+  return "<div class=\"rep\"><h3 class=\"position\">"+office+": " + official.name +" (" + official.party[0] +") </h3>";
 }
 function formatPhoto(official){
   if(official.photoUrl) {
@@ -84,14 +84,19 @@ function formatNews(official, id){
 
 //Utilizes data from google and helper functions to format data for display.
 function formatAndAppend (data) {
+  var officeName= "";
   var appendData = "";
   collapseId=0;
   appendData+="<div class=\"repDisplay\">";
   for (division in data.divisions) {
+    if(!data.divisions[division].officeIndices) {
+      console.log("empty division!")
+    } else {
     appendData +="<div class=division><h1>"+data.divisions[division].name+"</h1>";
     data.divisions[division].officeIndices.forEach(function(office){
+      officeName = data.offices[office].name;
       data.offices[office].officialIndices.forEach(function(official){
-        var name = formatName(data.officials[official])
+        var name = formatName(data.officials[official], officeName)
         var photo = formatPhoto(data.officials[official])
         var address = formatAddress(data.officials[official])
         var contact = formatContact(data.officials[official])
@@ -108,6 +113,7 @@ function formatAndAppend (data) {
       })
       //close out office
     })
+  }
     //close out division
     appendData+="</div>"
   }
@@ -149,13 +155,18 @@ function getNews(id) {
   });   
 }
 
+
 //Functions that run once the document is loaded
 $(document).ready(function() {
 
+  //Load in Google's Places API for autocomplete
+  var input = document.getElementById('zip');
+  autocomplete = new google.maps.places.Autocomplete(input);
+
   //see if data is stored and if so, format data from stored data.
-  if(localStorage["append"]) {
-    $(".container").append(localStorage["append"])
-  }
+  // if(localStorage["append"]) {
+  //   $(".container").append(localStorage["append"])
+  // }
   // event listener for panel groups
   $( ".panel-group" ).on( "click", function() {
     getNews($( this ).attr("id") );
