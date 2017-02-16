@@ -3,6 +3,8 @@ var columnSize = "col-sm-3";
 var panelSize  = "col-sm-6";
 var twitterHandle = "";
 var twitterTracker = {};
+var newsTracker = {};
+var wikiTracker ={};
 //include twitter embed JS -> https://dev.twitter.com/web/javascript/loading
 window.twttr = (function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0],
@@ -81,7 +83,7 @@ function formatAddress(official){
     address += official.address[0].line2 ? official.address[0].line2 + ", "  : "";
     address += official.address[0].city + ", " + official.address[0].state + "&nbsp;&nbsp;" + official.address[0].zip
   }
-  return "<div class=\" "+ columnSize +" address\"> <h4> Mailing Address </h4><p>" + address + "</p></div>";
+  return "<div class=\" "+ columnSize +" address\"> <h4> Contact </h4>" + address;
 }
 function formatContact(official){
   var website ="";
@@ -92,7 +94,7 @@ function formatContact(official){
   if (official.phones) {
     officialPhone = "<div class=\"phone\"><a href=\"tel:" + official.phones[0] + "\"</a>+" + official.phones[0] + "</div>"
   }
-  return "<div class=\" contact "+ columnSize +"\"><h4> Contact </h4> <p>" +officialPhone + website + " </p></div>"
+  return "<span class=\" contact\">" +officialPhone + website + "</span>"
 }
 function formatSocial(official) {
   var socialMedia="<div class=\"social-media "+ columnSize +"\"><h4> Social Media</h4><ul>";
@@ -107,17 +109,34 @@ function formatSocial(official) {
   }
   return socialMedia;
 }
-function formatNews(official, id, twitterHandle){
-  if(twitterHandle === "") {
-    var size = "col-sm-12";
-  } else {
-    size = panelSize
-  }
-  return "<div class=\""+size+" expand-row\"><div class=\" panel-group news-search\" id=\""+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" role=\"tablist\" aria-multiselectable=\"true\"><div class=\"panel panel-default\"><div class=\"panel-heading\" role=\"tab\" id=\"heading"+id+"\"><h4 class=\"panel-title\"><a class=\"panel-link\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\" href=\"#collapse"+id+"\" aria-expanded=\"true\" aria-controls=\"collapse"+id+"\"><span class=\"news-button-text\"> News <span class=\" glyphicon glyphicon-menu-hamburger\"></span></span></a></h4></div><div id=\"collapse"+id+"\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOn\"><div class= \"panel-body\"id=\"text"+ official.name.replace(/ /g,"-").replace(/\./g,"_")+"\"></div></div></div></div></div>"
+
+
+
+function tabs(official,id){
+  var idName = official.name.replace(/ /g,"-").replace(/\./g,"_")
+  var tabs = "<div>"
+
+  +"<!-- Nav tabs -->"
+  +"<ul class=\"nav nav-tabs\" role=\"tablist\">"
+    +"<li role=\"presentation\" class=\"news-search\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\">Recent News</a></li>"
+    +"<li role=\"presentation\" class=\"twitter-feed\" id=\""+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\">Recent Tweets</a></li>"
+    +"<li role=\"presentation\" class=\"wiki-feed\" id=\"wiki"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"><a href=\"#wikitab"+idName+"\" aria-controls=\"#wikitab" + idName + "\" role=\"tab\" data-toggle=\"tab\">Wikipedia</a></li>"
+    +"<li role=\"presentation\"><a href=\"#close\" aria-controls=\"close\" role=\"tab\" data-toggle=\"tab\">Close</a></li>"
+
+  +"</ul>"
+
+  +"<!-- Tab panes -->"
+  +"<div class=\"tab-content\">"
+  +   "<div role=\"tabpanel\" class=\"tab-pane \" id=\"recent-news"+id+"\"><span id=\"news"+official.name.replace(/ /g,"-").replace(/\./g,"_")+"\"> </span></div>"
+  +   "<div role=\"tabpanel\" class=\"tab-pane\" id=\"tab"+twitterHandle+"\"><span class=\"twitter\" id=\"embed"+twitterHandle+"\"> </span></div>"
+  +   "<div role=\"tabpanel\" class=\"tab-pane\" id=\"wikitab"+idName+"\"><span class=\"wiki-embed\" id=\"wikiembed"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"> </span></div>"
+  +   "<div role=\"tabpanel\" class=\"tab-pane\" id=\"close\"></div>"
+  +"</div>"
+
++"</div>";
+return tabs;
 }
-function formatTwitter(official, id){
-  return "<div class=\""+panelSize+" expand-row\"><div class=\"panel-group twitter-feed\" id=\""+ twitterHandle+"\" role=\"tablist\" aria-multiselectable=\"true\"><div class=\"panel panel-default\"><div class=\"panel-heading\" role=\"tab\" id=\"twitterheading"+id+"\"><h4 class=\"panel-title\"><a class=\"panel-link\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#"+ twitterHandle+"\" href=\"#collapse"+id+"\" aria-expanded=\"true\" aria-controls=\"collapse"+id+"\"><span class=\"news-button-text\"> Recent Tweets <span class=\" glyphicon glyphicon-menu-hamburger\"></span></span></a></h4></div><div id=\"collapse"+id+"\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingOn\"><div class= \"panel-body\"id=\"embed"+ twitterHandle+"\"></div></div></div></div></div>"
-}
+
 /////////////////////End Helper functions
 
 //Utilizes data from google and helper functions to format data for display.
@@ -140,48 +159,41 @@ function formatAndAppend (data) {
         var address = formatAddress(data.officials[official])
         var contact = formatContact(data.officials[official])
         var socialMedia = formatSocial(data.officials[official])
-        var newsButton = formatNews(data.officials[official], collapseId, twitterHandle)
 
-        console.log(twitterHandle)
         //id counter for newsButton that ensures each accordian panel is unique
         collapseId++;
         
         //compile all data
-        appendData+= name + photo + address + contact + socialMedia + "</div>";
+        appendData+= name + photo + address + contact + "</div>"+socialMedia;
 
-        //close out official with NewsButton
-        appendData+="<div class=\"row tweetandnewsrow\">"+newsButton
-
-        if(twitterHandle != "") {
-          var twitterButton= formatTwitter(data.officials[official], collapseId)
-          appendData += twitterButton +"</div>";
-          collapseId++;
-        } else {
-        appendData+="</div>";
-        }
-        appendData+="</div>"
+        appendData+="</div></div>"+tabs(data.officials[official], collapseId)
       })
-      //close out office
-      //appendData+="</div>"
+      //close office
     })
 
   }
-    //close out division
+    //close division
     appendData+="</div>"
   }
-  //close out repDisplay
+  //close repDisplay
   appendData+="</div>" 
   localStorage["append"] = appendData;
 
   $(".container").append(appendData);
   $( ".news-search" ).on( "click", function() {
       getNews( $( this ).attr("id") );
-    });
+      newsTracker[$( this ).attr("id")] = true;
+  });
   $( ".twitter-feed" ).on( "click", function() {
-    console.log($("embed"+$( this ).attr("id")).children(".twitter-timeline twitter-timeline-rendered"))
       if (!twitterTracker[$( this ).attr("id")]) {
       twitterEmbed( $( this ).attr("id") );
       twitterTracker[$( this ).attr("id")] = true;
+     }
+  });
+  $( ".wiki-feed" ).on( "click", function() {
+      if (!wikiTracker[$( this ).attr("id")]) {
+      getWikiPageName( $( this ).attr("id") );
+      wikiTracker[$( this ).attr("id")] = true;
      }
   });
 }
@@ -189,10 +201,10 @@ function formatAndAppend (data) {
 //grabs news from NY times API
 
 function getNews(id) {
-  if($("#content"+id).length>0) {
+  if(newsTracker[id]) {
      return
   }
-  var contentForDisplay = "<span id=\"content"+ id +"\"><ol>";
+  var contentForDisplay = "<ol id=\"content"+ id +"\">";
   var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
 
   url += '?' + $.param({
@@ -207,12 +219,12 @@ function getNews(id) {
     result.response.docs.forEach(function (article) {
       contentForDisplay += "<li><a href="+ article.web_url+" target=\"_blank\">"+ article.headline.main+"</a></li>"
     })
-    $("#text"+id).append(contentForDisplay+"</ol></span>");
+    $("#news"+id).append(contentForDisplay+"</ol>");
   }).fail(function(err) {
     throw err;
   });   
 }
-
+//Create embed code for twitter handle of official clicked
 function twitterEmbed(handle) {
   twttr.widgets.createTimeline(
   {
@@ -221,11 +233,52 @@ function twitterEmbed(handle) {
   },
   document.getElementById("embed"+handle),
   {
-    width: '450',
-    height: '30.5rem',
+    height: '35rem',
+    width: "520px",
   }).then(function (el) {
   });
 }
+//Grab most likely wiki page name for politican
+function getWikiPageName (name) {
+  console.log(name.slice(4));
+  var pageName=""
+  $.ajax({
+    type: "GET",
+    url: "https://en.wikipedia.org/w/api.php?action=opensearch&search="+name.slice(4)+"&limit=1&namespace=0&format=json&callback=?",
+    contentType: "application/json; charset=utf-8",
+    async: false,
+    dataType: "json",
+    headers: { 'Api-User-Agent': 'rep-finder/1.0' },
+    success: function (data, textStatus, jqXHR) {
+      console.log(data[1])
+        pageName=data[1][0].replace(/ /g,"_")
+        getWikiPageData(pageName, name);
+    },
+    error: function (errorMessage) {
+    }
+  });
+
+}
+//grab page data for page name of politican
+function getWikiPageData (pageName, id){
+  $.ajax({
+    type: "GET",
+    url: "http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page="+pageName+"&callback=?",
+    contentType: "application/json; charset=utf-8",
+    async: false,
+    dataType: "json",
+    headers: { 'Api-User-Agent': 'rep-finder/1.0' },
+    success: function (data, textStatus, jqXHR) {
+        console.log(data);
+        var markup = data.parse.text["*"];
+        var blurb = $('<div></div>').html(markup);
+        $('#wikiembed'+id.slice(4)).html($(blurb).find('p'));
+    },
+    error: function (errorMessage) {
+    }
+  });
+}
+
 //Functions that run once the document is loaded
 $(document).ready(function() {
 

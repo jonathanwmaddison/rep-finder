@@ -30,10 +30,6 @@ ul{
         text-align: center;
     }
 }
-
-.photo {
-
-}
 .img-crop {
 	object-fit: contain;
 }
@@ -59,6 +55,11 @@ ul{
 	border: .1rem solid grey;
 
 }
-.expand-row{
-
+@media (min-width: 768px) {
+	.tab-pane{
+		padding-left: 5.5rem;
+	}
+}
+.tab-pane{
+	border: #d3d3d3 .1rem solid;
 }
