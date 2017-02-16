@@ -40,7 +40,6 @@ function getData (address) {
 ///////// Helper functions to format data ////////
 function formatSocialButton (channel){
   if(channel.type === "Facebook") {
-    console.log(channel.type.toLowerCase())
     return  "<a target=\"_blank\" href =\"https://www.facebook.com/"+ channel.id +"/\"><img  class=\"socialIcon\" src=\"images/"+ channel.type.toLowerCase()+".svg\"></a></li>"
   }
   else if (channel.type === "Twitter"){
@@ -107,20 +106,24 @@ function formatSocial(official) {
 
 function tabs(official,id){
   var idName = official.name.replace(/ /g,"-").replace(/\./g,"_")
-  
   var twitterLink="";
   var twitterTab="";
   if(twitterHandle != "") {
-    twitterLink="<li role=\"presentation\" onclick=\"showCancel()\" class=\"twitter-feed\" id=\""+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\">Recent Tweets</a></li>";
-    twitterTab="<div role=\"tabpanel\" class=\"tab-pane\" id=\"tab"+twitterHandle+"\"><span class=\"twitter\" id=\"embed"+twitterHandle+"\"> </span></div>"
+    if(twitterHandle==="whitehouse"&&official.name==="Mike Pence") {
+      twitterHandle="VP"
+    } else if (twitterHandle === "whitehouse" && official.name === "Donald J. Trump") {
+      twitterHandle = "realDonaldTrump"
+    }
+    twitterLink="<li role=\"presentation\" onclick=\"showCancel(this.id)\" class=\"twitter-feed\" id=\"twitter"+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\">Recent Tweets</a></li>";
+    twitterTab="<div role=\"tabpanel\" class=\"tab-pane\" id=\"tab"+twitterHandle+"\"><span class=\"twitter\" id=\"embedtwitter"+twitterHandle+"\"> </span></div>"
   }
   var tabs = "<div>"
   +"<!-- Nav tabs -->"
   +"<ul class=\"nav nav-tabs\" role=\"tablist\">"
-    +"<li role=\"presentation\" class=\"news-search\" onclick=\"showCancel()\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\">Recent News</a></li>"
+    +"<li role=\"presentation\" class=\"news-search\" onclick=\"showCancel(this.id)\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\">Recent News</a></li>"
     + twitterLink
-    +"<li role=\"presentation\" class=\"wiki-feed\" onclick=\"showCancel()\" id=\"wiki"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"><a href=\"#wikitab"+idName+"\" aria-controls=\"#wikitab" + idName + "\" role=\"tab\" data-toggle=\"tab\">Wikipedia</a></li>"
-    +"<li role=\"presentation\" style=\"display:none;\" class=\"exit-display pull-right\" onclick=\"hideCancel()\"><a href=\"#close"+idName+"\" aria-controls=\"close"+idName+"\" role=\"tab\" data-toggle=\"tab\"> <span class=\"glyphicon glyphicon-remove\"></span></a></li>"
+    +"<li role=\"presentation\" class=\"wiki-feed\" onclick=\"showCancel(this.id)\" id=\"wiki"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"><a href=\"#wikitab"+idName+"\" aria-controls=\"#wikitab" + idName + "\" role=\"tab\" data-toggle=\"tab\">Wikipedia</a></li>"
+    +"<li role=\"presentation\" style=\"display:none;\" class=\"exit-display pull-right\" id=\"close"+id+"\" onclick=\"hideCancel(this.id)\"><a href=\"#close"+idName+"\" aria-controls=\"close"+idName+"\" role=\"tab\" data-toggle=\"tab\"> <span class=\"glyphicon glyphicon-remove\"></span></a></li>"
 
   +"</ul>"
 
@@ -167,7 +170,6 @@ function formatAndAppend (data) {
 
         appendData+="</div></div>"+ tabs(data.officials[official], collapseId)
       })
-     // appendData+="</div>";
       //close office
     })
   appendData+="</div>"
@@ -185,8 +187,8 @@ function formatAndAppend (data) {
   });
   $( ".twitter-feed" ).on( "click", function() {
       if (!twitterTracker[$( this ).attr("id")]) {
-      twitterEmbed( $( this ).attr("id") );
-      twitterTracker[$( this ).attr("id")] = true;
+        twitterEmbed( $( this ).attr("id") );
+        twitterTracker[$( this ).attr("id")] = true;
      }
   });
   $( ".wiki-feed" ).on( "click", function() {
@@ -228,7 +230,7 @@ function twitterEmbed(handle) {
   twttr.widgets.createTimeline(
   {
     sourceType: 'profile',
-    screenName: handle
+    screenName: handle.slice(7)
   },
   document.getElementById("embed"+handle),
   {
@@ -239,7 +241,6 @@ function twitterEmbed(handle) {
 }
 //Grab most likely wiki page name for politican
 function getWikiPageName (name) {
-  console.log(name.slice(4));
   var pageName=""
   $.ajax({
     type: "GET",
@@ -249,7 +250,6 @@ function getWikiPageName (name) {
     dataType: "json",
     headers: { 'Api-User-Agent': 'rep-finder/1.0' },
     success: function (data, textStatus, jqXHR) {
-      console.log(data[1])
         pageName=data[1][0].replace(/ /g,"_")
         getWikiPageData(pageName, name);
     },
@@ -268,7 +268,6 @@ function getWikiPageData (pageName, id){
     dataType: "json",
     headers: { 'Api-User-Agent': 'rep-finder/1.0' },
     success: function (data, textStatus, jqXHR) {
-        console.log(data);
         var markup = data.parse.text["*"];
         var blurb = $('<div></div>').html(markup);
         $('#wikiembed'+id.slice(4)).html($(blurb).find('p'));
@@ -279,11 +278,24 @@ function getWikiPageData (pageName, id){
 }
 
 
-function hideCancel () {
-  $(".exit-display").attr("style", "display:none;")
+function hideCancel (id) {
+
+  $("#"+id).attr("style", "display:none;")
 }
-function showCancel() {
-  $(".exit-display").attr("style", "display:block;")
+function showCancel(id) {
+
+  if (id.slice(0,4) ==="wiki") {
+    $("#"+id).next().attr("style", "display:block;")
+      return 0
+  }
+  else if (id.slice(0,7)==="twitter") {
+    $("#"+id).next().next().attr("style", "display:block;")
+    return 0
+  }
+  else {
+    $("#"+id).next().next().next().attr("style", "display:block;")
+    return 0 
+  }
 }
 //Functions that run once the document is loaded
 $(document).ready(function() {
