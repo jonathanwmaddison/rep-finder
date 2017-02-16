@@ -64,12 +64,6 @@ function formatPhoto(official){
   var photo =""
   if(official.photoUrl) {
      photo=official.photoUrl;
-        if (official.name === "Donald J. Trump") {
-        photo = "https://peopledotcom.files.wordpress.com/2016/10/trump-baldwin-800-1.jpg";
-      } 
-      else if (official.name === "Mike Pence") {
-        photo = "https://typeset-beta.imgix.net/2016%2F7%2F14%2F471131090.jpg"
-      }
   } else {
         photo = "http://i.imgur.com/iMTIAcQ.jpg"
     }
@@ -117,16 +111,16 @@ function tabs(official,id){
   var twitterLink="";
   var twitterTab="";
   if(twitterHandle != "") {
-    twitterLink="<li role=\"presentation\" class=\"twitter-feed\" id=\""+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\">Recent Tweets</a></li>";
+    twitterLink="<li role=\"presentation\" onclick=\"showCancel()\" class=\"twitter-feed\" id=\""+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\">Recent Tweets</a></li>";
     twitterTab="<div role=\"tabpanel\" class=\"tab-pane\" id=\"tab"+twitterHandle+"\"><span class=\"twitter\" id=\"embed"+twitterHandle+"\"> </span></div>"
   }
   var tabs = "<div>"
   +"<!-- Nav tabs -->"
   +"<ul class=\"nav nav-tabs\" role=\"tablist\">"
-    +"<li role=\"presentation\" class=\"news-search\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\">Recent News</a></li>"
+    +"<li role=\"presentation\" class=\"news-search\" onclick=\"showCancel()\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\">Recent News</a></li>"
     + twitterLink
-    +"<li role=\"presentation\" class=\"wiki-feed\" id=\"wiki"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"><a href=\"#wikitab"+idName+"\" aria-controls=\"#wikitab" + idName + "\" role=\"tab\" data-toggle=\"tab\">Wikipedia</a></li>"
-    +"<li role=\"presentation\"><a href=\"#close"+idName+"\" aria-controls=\"close"+idName+"\" role=\"tab\" data-toggle=\"tab\">Close</a></li>"
+    +"<li role=\"presentation\" class=\"wiki-feed\" onclick=\"showCancel()\" id=\"wiki"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"><a href=\"#wikitab"+idName+"\" aria-controls=\"#wikitab" + idName + "\" role=\"tab\" data-toggle=\"tab\">Wikipedia</a></li>"
+    +"<li role=\"presentation\" style=\"display:none;\" class=\"exit-display pull-right\" onclick=\"hideCancel()\"><a href=\"#close"+idName+"\" aria-controls=\"close"+idName+"\" role=\"tab\" data-toggle=\"tab\"> <span class=\"glyphicon glyphicon-remove\"></span></a></li>"
 
   +"</ul>"
 
@@ -284,6 +278,13 @@ function getWikiPageData (pageName, id){
   });
 }
 
+
+function hideCancel () {
+  $(".exit-display").attr("style", "display:none;")
+}
+function showCancel() {
+  $(".exit-display").attr("style", "display:block;")
+}
 //Functions that run once the document is loaded
 $(document).ready(function() {
 
