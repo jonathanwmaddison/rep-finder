@@ -1,4 +1,3 @@
-localStorage["data"] =""
 //Bootstrap col size for address,photo, etc. In case it needs to be adjusted.
 var columnSize = "col-sm-3";
 var panelSize  = "col-sm-6";
@@ -27,6 +26,7 @@ window.twttr = (function(d, s, id) {
 //store data from representative search. Google civic info API provides data!
 
 function getData (address) {
+  $(".repDisplay").remove()
   console.log(address);
   var key = "AIzaSyCZJ6S0JHvG9JwJWVK6H0ujFwBM0IXX0jw";
   var url = "https://www.googleapis.com/civicinfo/v2/representatives?address="+encodeURIComponent(address)+"&key="+key;
@@ -64,16 +64,14 @@ function formatPhoto(official){
   var photo =""
   if(official.photoUrl) {
      photo=official.photoUrl;
-  } else {
-      if (official.name === "Donald J. Trump") {
+        if (official.name === "Donald J. Trump") {
         photo = "https://peopledotcom.files.wordpress.com/2016/10/trump-baldwin-800-1.jpg";
       } 
       else if (official.name === "Mike Pence") {
         photo = "https://typeset-beta.imgix.net/2016%2F7%2F14%2F471131090.jpg"
       }
-      else {
+  } else {
         photo = "http://i.imgur.com/iMTIAcQ.jpg"
-      }
     }
     return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-crop center-block\"></div>";
 }
@@ -106,7 +104,7 @@ function formatSocial(official) {
     socialMedia+="</ul></div>";
   }
   else {
-    socialMedia+="</div>"
+    socialMedia+="No Social Media accounts found</div>"
   }
   return socialMedia;
 }
@@ -115,12 +113,18 @@ function formatSocial(official) {
 
 function tabs(official,id){
   var idName = official.name.replace(/ /g,"-").replace(/\./g,"_")
+  
+  var twitterLink="";
+  var twitterTab="";
+  if(twitterHandle != "") {
+    twitterLink="<li role=\"presentation\" class=\"twitter-feed\" id=\""+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\">Recent Tweets</a></li>";
+    twitterTab="<div role=\"tabpanel\" class=\"tab-pane\" id=\"tab"+twitterHandle+"\"><span class=\"twitter\" id=\"embed"+twitterHandle+"\"> </span></div>"
+  }
   var tabs = "<div>"
-
   +"<!-- Nav tabs -->"
   +"<ul class=\"nav nav-tabs\" role=\"tablist\">"
     +"<li role=\"presentation\" class=\"news-search\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\">Recent News</a></li>"
-    +"<li role=\"presentation\" class=\"twitter-feed\" id=\""+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\">Recent Tweets</a></li>"
+    + twitterLink
     +"<li role=\"presentation\" class=\"wiki-feed\" id=\"wiki"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"><a href=\"#wikitab"+idName+"\" aria-controls=\"#wikitab" + idName + "\" role=\"tab\" data-toggle=\"tab\">Wikipedia</a></li>"
     +"<li role=\"presentation\"><a href=\"#close\" aria-controls=\"close\" role=\"tab\" data-toggle=\"tab\">Close</a></li>"
 
@@ -129,7 +133,7 @@ function tabs(official,id){
   +"<!-- Tab panes -->"
   +"<div class=\"tab-content\">"
   +   "<div role=\"tabpanel\" class=\"tab-pane \" id=\"recent-news"+id+"\"><span id=\"news"+official.name.replace(/ /g,"-").replace(/\./g,"_")+"\"> </span></div>"
-  +   "<div role=\"tabpanel\" class=\"tab-pane\" id=\"tab"+twitterHandle+"\"><span class=\"twitter\" id=\"embed"+twitterHandle+"\"> </span></div>"
+  +   twitterTab
   +   "<div role=\"tabpanel\" class=\"tab-pane\" id=\"wikitab"+idName+"\"><span class=\"wiki-embed\" id=\"wikiembed"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"> </span></div>"
   +   "<div role=\"tabpanel\" class=\"tab-pane\" id=\"close\"></div>"
   +"</div>"
@@ -167,18 +171,18 @@ function formatAndAppend (data) {
         //compile all data
         appendData+= name + photo + address + contact + "</div>"+socialMedia;
 
-        appendData+="</div></div>"+tabs(data.officials[official], collapseId)
+        appendData+="</div></div>"+ tabs(data.officials[official], collapseId)
       })
+     // appendData+="</div>";
       //close office
     })
-
+  appendData+="</div>"
   }
     //close division
-    appendData+="</div>"
+    
   }
   //close repDisplay
   appendData+="</div>" 
-  localStorage["append"] = appendData;
 
   $(".container").append(appendData);
   $( ".news-search" ).on( "click", function() {
@@ -288,7 +292,7 @@ $(document).ready(function() {
   autocomplete = new google.maps.places.Autocomplete(input);
 
   //see if data is stored and if so, format data from stored data.
-  if(localStorage["data"]) {
+  if(localStorage["dataV2"]) {
     formatAndAppend(JSON.parse(localStorage["dataV2"]))
   }
 
