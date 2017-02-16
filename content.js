@@ -1,3 +1,4 @@
+localStorage["data"] =""
 //Bootstrap col size for address,photo, etc. In case it needs to be adjusted.
 var columnSize = "col-sm-3";
 var panelSize  = "col-sm-6";
@@ -32,7 +33,7 @@ function getData (address) {
   var count=0
   var data;
   $.getJSON(url, function(data){
-    localStorage["data"] = JSON.stringify(data);
+    localStorage["dataV2"] = JSON.stringify(data);
     formatAndAppend(data)
   })
 }
@@ -288,7 +289,7 @@ $(document).ready(function() {
 
   //see if data is stored and if so, format data from stored data.
   if(localStorage["data"]) {
-    formatAndAppend(JSON.parse(localStorage["data"]))
+    formatAndAppend(JSON.parse(localStorage["dataV2"]))
   }
 
   // event listener for rep search form
