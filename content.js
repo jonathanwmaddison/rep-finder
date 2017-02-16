@@ -126,7 +126,7 @@ function tabs(official,id){
     +"<li role=\"presentation\" class=\"news-search\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\">Recent News</a></li>"
     + twitterLink
     +"<li role=\"presentation\" class=\"wiki-feed\" id=\"wiki"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"><a href=\"#wikitab"+idName+"\" aria-controls=\"#wikitab" + idName + "\" role=\"tab\" data-toggle=\"tab\">Wikipedia</a></li>"
-    +"<li role=\"presentation\"><a href=\"#close\" aria-controls=\"close\" role=\"tab\" data-toggle=\"tab\">Close</a></li>"
+    +"<li role=\"presentation\"><a href=\"#close"+idName+"\" aria-controls=\"close"+idName+"\" role=\"tab\" data-toggle=\"tab\">Close</a></li>"
 
   +"</ul>"
 
@@ -135,7 +135,7 @@ function tabs(official,id){
   +   "<div role=\"tabpanel\" class=\"tab-pane \" id=\"recent-news"+id+"\"><span id=\"news"+official.name.replace(/ /g,"-").replace(/\./g,"_")+"\"> </span></div>"
   +   twitterTab
   +   "<div role=\"tabpanel\" class=\"tab-pane\" id=\"wikitab"+idName+"\"><span class=\"wiki-embed\" id=\"wikiembed"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"> </span></div>"
-  +   "<div role=\"tabpanel\" class=\"tab-pane\" id=\"close\"></div>"
+  +   "<div role=\"tabpanel\" class=\"tab-pane\" id=\"close"+idName+"\"></div>"
   +"</div>"
 
 +"</div>";
