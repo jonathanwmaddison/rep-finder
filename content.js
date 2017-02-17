@@ -252,8 +252,12 @@ function getWikiPageName (name) {
     headers: { 'Api-User-Agent': 'rep-finder/1.0' },
     success: function (data, textStatus, jqXHR) {
       console.log(data);
+      if(data[1].length<1) {
+        $('#wikiembed'+name.slice(4)).html("<br><p>Sorry! We could not find a wikipedia page for this representative.</p><br>");
+      } else {
         pageName=data[1][0].replace(/ /g,"_")
         getWikiPageData(pageName, name);
+      }
     },
     error: function (errorMessage) {
     }
