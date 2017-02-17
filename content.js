@@ -1,5 +1,5 @@
 //Bootstrap col size for address,photo, etc. In case it needs to be adjusted.
-var columnSize = "col-sm-3";
+var columnSize = "col-sm-3 col-xs-12";
 var panelSize  = "col-sm-6";
 var twitterHandle = "";
 var twitterTracker = {};
@@ -66,7 +66,7 @@ function formatPhoto(official){
   } else {
         photo = "http://i.imgur.com/iMTIAcQ.jpg"
     }
-    return "<div class=\"row\"><div class=\" "+ columnSize +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-crop center-block\"></div>";
+    return "<div class=\" "+ "col-12" +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-crop center-block pull-left \"></div>";
 }
 function formatAddress(official){
   var address=""
@@ -97,7 +97,7 @@ function formatSocial(official) {
     socialMedia+="</ul></div>";
   }
   else {
-    socialMedia+="No Social Media accounts found</div>"
+    return 1; // no social media accounts found!
   }
   return socialMedia;
 }
@@ -117,8 +117,8 @@ function tabs(official,id){
     twitterLink="<li role=\"presentation\" onclick=\"showCancel(this.id)\" class=\"twitter-feed\" id=\"twitter"+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\">Recent Tweets</a></li>";
     twitterTab="<div role=\"tabpanel\" class=\"tab-pane twitter-tab\" id=\"tab"+twitterHandle+"\"><span class=\"twitter\" id=\"embedtwitter"+twitterHandle+"\"> </span></div>"
   }
-  var tabs = "<div>"
-  +"<!-- Nav tabs -->"
+  var tabs = 
+  "<!-- Nav tabs -->"
   +"<ul class=\"nav nav-tabs\" role=\"tablist\">"
     +"<li role=\"presentation\" class=\"news-search\" onclick=\"showCancel(this.id)\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\">Recent News</a></li>"
     + twitterLink
@@ -126,17 +126,15 @@ function tabs(official,id){
     +"<li role=\"presentation\" style=\"display:none;\" class=\"exit-display pull-right\" id=\"close"+id+"\" onclick=\"hideCancel(this.id)\"><a href=\"#close"+idName+"\" aria-controls=\"close"+idName+"\" role=\"tab\" data-toggle=\"tab\"> <span class=\"glyphicon glyphicon-remove\"></span></a></li>"
 
   +"</ul>"
-
-  +"<!-- Tab panes -->"
-  +"<div class=\"tab-content\">"
+  var tabPanes = 
+  "<!-- Tab panes -->"
+  +"<div class=\"tab-content \">"
   +   "<div role=\"tabpanel\" class=\"tab-pane \" id=\"recent-news"+id+"\"><span id=\"news"+official.name.replace(/ /g,"-").replace(/\./g,"_")+"\"> </span></div>"
   +   twitterTab
   +   "<div role=\"tabpanel\" class=\"tab-pane\" id=\"wikitab"+idName+"\"><span class=\"wiki-embed\" id=\"wikiembed"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"> </span></div>"
   +   "<div role=\"tabpanel\" class=\"tab-pane\" id=\"close"+idName+"\"></div>"
-  +"</div>"
-
-+"</div>";
-return tabs;
+  +"</div>";
+return [tabs,tabPanes];
 }
 
 /////////////////////End Helper functions
@@ -151,7 +149,7 @@ function formatAndAppend (data) {
   for (division in data.divisions) {
     if(!data.divisions[division].officeIndices) {
     } else {
-    appendData +="<div class=division><h1>"+data.divisions[division].name+"</h1>";
+    appendData +="<hr class=\"division-hr\"><div class=division><h1>"+data.divisions[division].name.toUpperCase()+"</h1>";
     data.divisions[division].officeIndices.forEach(function(office){
       officeName = data.offices[office].name;
       data.offices[office].officialIndices.forEach(function(official){
@@ -161,21 +159,24 @@ function formatAndAppend (data) {
         var address = formatAddress(data.officials[official])
         var contact = formatContact(data.officials[official])
         var socialMedia = formatSocial(data.officials[official])
-
+        var menu = tabs(data.officials[official], collapseId)
+        if (socialMedia === 1) {
+          socialMedia="";
+        }
         //id counter for newsButton that ensures each accordian panel is unique
         collapseId++;
         
         //compile all data
-        appendData+= name + photo + address + contact + "</div>"+socialMedia;
-
-        appendData+="</div></div>"+ tabs(data.officials[official], collapseId)
-      })
+        appendData+= name + "<div class=\"row\">"+ photo + "<div class=\"row\">"+address + contact + "</div>" + socialMedia;
+        appendData+="<div class=\"col-sm-8\">"+menu[0]+"</div></div>";
+        appendData+="<div class=\"row tab-display\">"+menu[1]+"</div>";
+        appendData+="</div></div>";
+        })
       //close office
-    })
-  appendData+="</div>"
-  }
+      })
+      appendData+="</div>"
+    }
     //close division
-    
   }
   //close repDisplay
   appendData+="</div>" 

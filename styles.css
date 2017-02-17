@@ -12,9 +12,26 @@ ul{
 	font-size: 1rem;
 }
 .socialIcon{
-	width: 4rem;
+	width: 3rem;
 	padding-right: 1rem;
+	padding-left:0;
 }
+.social-media ul {
+	padding-left:0;
+}
+h1 {
+	font-size: 20px;
+}
+h3, h4 {
+	font-weight: normal;
+}
+h3{
+	font-size: 18px;
+}
+h4{
+	font-size: 16px;
+}
+
 .panel-group{
 	padding: 1rem
 }
@@ -30,11 +47,25 @@ ul{
         text-align: center;
     }
 }
+.division-hr {
+	height: 10px;
+	color: black;
+	background-color: black;
+}
 .img-crop {
-	object-fit: contain;
+	object-fit: cover;
+}
+@media (max-width: 768px) {
+	.photo .pull-left{
+    float: none!important;
+	}
+}
+.rep{
+	padding-bottom: 30px;
+	border-bottom: 2px dashed grey;
 }
 #repPhoto {
-	height: 15rem; background-color: white; 
+	height: 18rem; background-color: white; 
 }
 #repPhoto[class] {
 	width: 15rem;
@@ -60,8 +91,29 @@ ul{
 		padding-left: 5.5rem;
 	}
 }
+@media (max-width: 768px) {
+	.nav-tabs {
+		padding-left: 15px;
+	}
+}
+@media (min-width: 768px) {
+	#repPhoto {
+		padding-left: 15px;
+	}
+}
+
 .tab-pane{
 	border: #d3d3d3 .1rem solid;
+}
+.nav-tabs{
+	border: 0;
+}
+.nav-tabs li a {
+	padding-left: 0;
+}
+.tab-display {
+	border: 1px grey;
+	margin: 15px;
 }
 .twitter-tab{
 	height: 52rem;
