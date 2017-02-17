@@ -115,7 +115,7 @@ function tabs(official,id){
       twitterHandle = "realDonaldTrump"
     }
     twitterLink="<li role=\"presentation\" onclick=\"showCancel(this.id)\" class=\"twitter-feed\" id=\"twitter"+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\">Recent Tweets</a></li>";
-    twitterTab="<div role=\"tabpanel\" class=\"tab-pane\" id=\"tab"+twitterHandle+"\"><span class=\"twitter\" id=\"embedtwitter"+twitterHandle+"\"> </span></div>"
+    twitterTab="<div role=\"tabpanel\" class=\"tab-pane twitter-tab\" id=\"tab"+twitterHandle+"\"><span class=\"twitter\" id=\"embedtwitter"+twitterHandle+"\"> </span></div>"
   }
   var tabs = "<div>"
   +"<!-- Nav tabs -->"
@@ -234,7 +234,7 @@ function twitterEmbed(handle) {
   },
   document.getElementById("embed"+handle),
   {
-    height: '35rem',
+    height: '50rem',
     width: "520px",
   }).then(function (el) {
   });
