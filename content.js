@@ -247,9 +247,11 @@ function getWikiPageName (name) {
     url: "https://en.wikipedia.org/w/api.php?action=opensearch&search="+name.slice(4)+"&limit=1&namespace=0&format=json&callback=?",
     contentType: "application/json; charset=utf-8",
     async: false,
+    srwhat: "text",
     dataType: "json",
     headers: { 'Api-User-Agent': 'rep-finder/1.0' },
     success: function (data, textStatus, jqXHR) {
+      console.log(data);
         pageName=data[1][0].replace(/ /g,"_")
         getWikiPageData(pageName, name);
     },
@@ -268,9 +270,15 @@ function getWikiPageData (pageName, id){
     dataType: "json",
     headers: { 'Api-User-Agent': 'rep-finder/1.0' },
     success: function (data, textStatus, jqXHR) {
-        var markup = data.parse.text["*"];
-        var blurb = $('<div></div>').html(markup);
+      console.log(data)
+      var markup = data.parse.text["*"];
+      var blurb = $('<div></div>').html(markup);
+      if($(blurb).find(".redirectMsg").length>0) {
+        var newPageName = (blurb).find("a").attr("href").slice(6);
+        getWikiPageData(newPageName, id)
+      } else {
         $('#wikiembed'+id.slice(4)).html($(blurb).find('p'));
+      }
     },
     error: function (errorMessage) {
     }
