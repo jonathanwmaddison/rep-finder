@@ -42,6 +42,11 @@ h4{
 .glyphicon-menu-hamburger{
 	font-size: 1rem;
 }
+@media (min-width: 768px){
+	.address {
+		min-height: 14.7rem;
+	}
+}
 @media (max-width: 768px) {
     .address, .contact, .social-media, .panel-link  {
         text-align: center;
@@ -86,14 +91,11 @@ h4{
 	border: .1rem solid grey;
 
 }
-@media (min-width: 768px) {
-	.tab-pane{
-		padding-left: 5.5rem;
-	}
-}
+
+
 @media (max-width: 768px) {
 	.nav-tabs {
-		padding-left: 15px;
+		padding-left: 2.5rem;
 	}
 }
 @media (min-width: 768px) {
@@ -101,10 +103,21 @@ h4{
 		padding-left: 15px;
 	}
 }
-
+.media-icon {
+	padding-bottom: .5rem;
+	height: 3rem;
+	padding-right: .5rem;
+}
 .tab-pane{
 	border: #d3d3d3 .1rem solid;
+	padding: 3rem;
+	margin-top: -2.7rem;
+
 }
+.wiki-feed.active, .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+	background-color: white;
+}
+
 .nav-tabs{
 	border: 0;
 }
@@ -117,4 +130,19 @@ h4{
 }
 .twitter-tab{
 	height: 52rem;
+}
+.exit-display{
+	padding-top: .5rem;
+}
+.glyphicon-remove{
+	padding-left: 1.5rem;
+}
+.news-search{
+	margin-left: -1rem;
+}
+.nav-tabs li a{
+	padding-left: 1rem;
+}
+.spacing{
+	padding-top: 2rem;
 }

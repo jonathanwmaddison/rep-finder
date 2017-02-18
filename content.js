@@ -69,12 +69,15 @@ function formatPhoto(official){
     return "<div class=\" "+ "col-12" +" photo\"><img id = \"repPhoto\" src=\"" + photo + "\" alt=\" Photo of Rep\" class=\"img-crop center-block pull-left \"></div>";
 }
 function formatAddress(official){
-  var address=""
+  var address="";
+  var additionalBr="";
   if(official.address) {
     address += official.address[0].line1 ? official.address[0].line1 + ", " : "";
     address += official.address[0].line2 ? official.address[0].line2 + ", "  : "";
     address += official.address[0].city + ", " + official.address[0].state + "&nbsp;&nbsp;" + official.address[0].zip
+
   }
+
   return "<div class=\" "+ columnSize +" address\"> <h4> Contact </h4>" + address;
 }
 function formatContact(official){
@@ -114,16 +117,16 @@ function tabs(official,id){
     } else if (twitterHandle === "whitehouse" && official.name === "Donald J. Trump") {
       twitterHandle = "realDonaldTrump"
     }
-    twitterLink="<li role=\"presentation\" onclick=\"showCancel(this.id)\" class=\"twitter-feed\" id=\"twitter"+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\">Recent Tweets</a></li>";
+    twitterLink="<li role=\"presentation\" onclick=\"showCancel(this.id)\" class=\"twitter-feed\" id=\"twitter"+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\"><img class=\"media-icon\" src=\"images/twitter.svg\">Recent Tweets</a></li>";
     twitterTab="<div role=\"tabpanel\" class=\"tab-pane twitter-tab\" id=\"tab"+twitterHandle+"\"><span class=\"twitter\" id=\"embedtwitter"+twitterHandle+"\"> </span></div>"
   }
   var tabs = 
   "<!-- Nav tabs -->"
   +"<ul class=\"nav nav-tabs\" role=\"tablist\">"
-    +"<li role=\"presentation\" class=\"news-search\" onclick=\"showCancel(this.id)\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\">Recent News</a></li>"
+    +"<li role=\"presentation\" class=\"news-search\" onclick=\"showCancel(this.id)\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\"><img class=\"media-icon\" src=\"images/nyt.png\"> Recent News</a></li>"
     + twitterLink
-    +"<li role=\"presentation\" class=\"wiki-feed\" onclick=\"showCancel(this.id)\" id=\"wiki"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"><a href=\"#wikitab"+idName+"\" aria-controls=\"#wikitab" + idName + "\" role=\"tab\" data-toggle=\"tab\">Wikipedia</a></li>"
-    +"<li role=\"presentation\" style=\"display:none;\" class=\"exit-display pull-right\" id=\"close"+id+"\" onclick=\"hideCancel(this.id)\"><a href=\"#close"+idName+"\" aria-controls=\"close"+idName+"\" role=\"tab\" data-toggle=\"tab\"> <span class=\"glyphicon glyphicon-remove\"></span></a></li>"
+    +"<li role=\"presentation\" class=\"wiki-feed\" onclick=\"showCancel(this.id)\" id=\"wiki"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"><a href=\"#wikitab"+idName+"\" aria-controls=\"#wikitab" + idName + "\" role=\"tab\" data-toggle=\"tab\"><img class=\"media-icon\" src=\"images/wikipedia.png\">Wikipedia</a></li>"
+    +"<li role=\"presentation\" style=\"display:none;\" class=\"exit-display \" id=\"close"+id+"\" onclick=\"hideCancel(this.id)\"><a href=\"#close"+idName+"\" aria-controls=\"close"+idName+"\" role=\"tab\" data-toggle=\"tab\"> <span class=\"glyphicon glyphicon-remove\"></span></a></li>"
 
   +"</ul>"
   var tabPanes = 
@@ -226,6 +229,7 @@ function getNews(id) {
     throw err;
   });   
 }
+
 //Create embed code for twitter handle of official clicked
 function twitterEmbed(handle) {
   twttr.widgets.createTimeline(
@@ -235,11 +239,12 @@ function twitterEmbed(handle) {
   },
   document.getElementById("embed"+handle),
   {
-    height: '50rem',
-    width: "520px",
+    height: '45rem',
+    width: "800px",
   }).then(function (el) {
   });
 }
+
 //Grab most likely wiki page name for politican
 function getWikiPageName (name) {
   var pageName=""
