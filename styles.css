@@ -124,6 +124,9 @@ h4{
 .nav-tabs li a {
 	padding-left: 0;
 }
+.nav-tabs li {
+margin-top: .3rem;
+}
 .tab-display {
 	border: 1px grey;
 	margin: 15px;
