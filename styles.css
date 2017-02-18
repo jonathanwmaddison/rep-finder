@@ -5,6 +5,9 @@
 ul{
 	padding-left: 1.7rem;
 }
+.current-location {
+	text-align: center;
+}
 .get-news{
 	margin-bottom: 1rem;
 	width: 10rem;

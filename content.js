@@ -144,15 +144,15 @@ return [tabs,tabPanes];
 
 //Utilizes data from google and helper functions to format data for display.
 function formatAndAppend (data) {
-
+  console.log(data)
   var officeName= "";
   var appendData = "";
   collapseId=0;
-  appendData+="<div class=\"repDisplay\">";
+  appendData+="<div class=\"current-location\"><h3>Elected officials for "+data.normalizedInput.city+", "+data.normalizedInput.state +"</div>"+"</div><div class=\"repDisplay\">";
   for (division in data.divisions) {
     if(!data.divisions[division].officeIndices) {
     } else {
-    appendData +="<hr class=\"division-hr\"><div class=division><h1>"+data.divisions[division].name.toUpperCase()+"</h1>";
+    appendData +="<div class=division><hr class=\"division-hr\"><h1>"+data.divisions[division].name.toUpperCase()+"</h1>";
     data.divisions[division].officeIndices.forEach(function(office){
       officeName = data.offices[office].name;
       data.offices[office].officialIndices.forEach(function(official){
