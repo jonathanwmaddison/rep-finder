@@ -117,13 +117,13 @@ function tabs(official,id){
     } else if (twitterHandle === "whitehouse" && official.name === "Donald J. Trump") {
       twitterHandle = "realDonaldTrump"
     }
-    twitterLink="<li role=\"presentation\" onclick=\"showCancel(this.id)\" class=\"twitter-feed\" id=\"twitter"+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\"><img class=\"media-icon\" src=\"images/twitter.svg\">Recent Tweets</a></li>";
+    twitterLink="<li role=\"presentation\" onclick=\"showCancel(this.id)\" class=\"twitter-feed\" id=\"twitter"+twitterHandle+"\"><a href=\"#tab"+twitterHandle+"\" aria-controls=\"tab"+twitterHandle+"\" role=\"tab\" data-toggle=\"tab\"><img class=\"media-icon\" src=\"images/twitter.svg\">Tweets</a></li>";
     twitterTab="<div role=\"tabpanel\" class=\"tab-pane twitter-tab\" id=\"tab"+twitterHandle+"\"><span class=\"twitter\" id=\"embedtwitter"+twitterHandle+"\"> </span></div>"
   }
   var tabs = 
   "<!-- Nav tabs -->"
   +"<ul class=\"nav nav-tabs\" role=\"tablist\">"
-    +"<li role=\"presentation\" class=\"news-search\" onclick=\"showCancel(this.id)\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\"><img class=\"media-icon\" src=\"images/nyt.png\"> Recent News</a></li>"
+    +"<li role=\"presentation\" class=\"news-search\" onclick=\"showCancel(this.id)\" id=\""+ idName+"\"><a href=\"#recent-news"+id+"\" class=\"\" aria-controls=\"recent-news"+id+"\" id=\"heading"+id+"\" role=\"tab\" data-toggle=\"tab\"><img class=\"media-icon\" src=\"images/nyt.png\">News</a></li>"
     + twitterLink
     +"<li role=\"presentation\" class=\"wiki-feed\" onclick=\"showCancel(this.id)\" id=\"wiki"+official.name.replace(/ /g,"_").replace(/\./g,"")+"\"><a href=\"#wikitab"+idName+"\" aria-controls=\"#wikitab" + idName + "\" role=\"tab\" data-toggle=\"tab\"><img class=\"media-icon\" src=\"images/wikipedia.png\">Wikipedia</a></li>"
     +"<li role=\"presentation\" style=\"display:none;\" class=\"exit-display \" id=\"close"+id+"\" onclick=\"hideCancel(this.id)\"><a href=\"#close"+idName+"\" aria-controls=\"close"+idName+"\" role=\"tab\" data-toggle=\"tab\"> <span class=\"glyphicon glyphicon-remove\"></span></a></li>"
@@ -152,7 +152,7 @@ function formatAndAppend (data) {
   for (division in data.divisions) {
     if(!data.divisions[division].officeIndices) {
     } else {
-    appendData +="<div class=division><hr class=\"division-hr\"><h1>"+data.divisions[division].name.toUpperCase()+"</h1>";
+    appendData +="<div class=\"division\"><hr class=\"division-hr\"><h1 class=\"div-title\">"+data.divisions[division].name.toUpperCase()+"</h1>";
     data.divisions[division].officeIndices.forEach(function(office){
       officeName = data.offices[office].name;
       data.offices[office].officialIndices.forEach(function(official){
@@ -171,7 +171,7 @@ function formatAndAppend (data) {
         
         //compile all data
         appendData+= name + "<div class=\"row\">"+ photo + "<div class=\"row\">"+address + contact + "</div>" + socialMedia;
-        appendData+="<div class=\"col-sm-8\">"+menu[0]+"</div></div>";
+        appendData+="<div class=\"col-sm-8 tab-container\">"+menu[0]+"</div></div>";
         appendData+="<div class=\"row tab-display\">"+menu[1]+"</div>";
         appendData+="</div></div>";
         })
