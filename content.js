@@ -105,7 +105,9 @@ function formatSocial(official) {
   return socialMedia;
 }
 
-
+function divTabs (division) {
+  console.log(division);
+}
 
 function tabs(official,id){
   var idName = official.name.replace(/ /g,"-").replace(/\./g,"_")
@@ -152,7 +154,8 @@ function formatAndAppend (data) {
   for (division in data.divisions) {
     if(!data.divisions[division].officeIndices) {
     } else {
-    appendData +="<div class=\"division\"><hr class=\"division-hr\"><h1 class=\"div-title\">"+data.divisions[division].name.toUpperCase()+"</h1>";
+    divTabs(data.divisions[division])
+    appendData +="<div class=\"division\" id=\""+data.divisions[division].name+"\"><hr class=\"division-hr\"><h1 class=\"div-title\">"+data.divisions[division].name.toUpperCase()+"</h1>";
     data.divisions[division].officeIndices.forEach(function(office){
       officeName = data.offices[office].name;
       data.offices[office].officialIndices.forEach(function(official){
