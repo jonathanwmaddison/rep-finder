@@ -5,6 +5,7 @@ var twitterHandle = "";
 var twitterTracker = {};
 var newsTracker = {};
 var wikiTracker ={};
+
 //include twitter embed JS -> https://dev.twitter.com/web/javascript/loading
 window.twttr = (function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0],
@@ -75,7 +76,6 @@ function formatAddress(official){
     address += official.address[0].line1 ? official.address[0].line1 + ", " : "";
     address += official.address[0].line2 ? official.address[0].line2 + ", "  : "";
     address += official.address[0].city + ", " + official.address[0].state + "&nbsp;&nbsp;" + official.address[0].zip
-
   }
 
   return "<div class=\" "+ columnSize +" address\"> <h4> Contact </h4>" + address;
@@ -105,8 +105,16 @@ function formatSocial(official) {
   return socialMedia;
 }
 
-function divTabs (division) {
-  console.log(division);
+function divTabs (divisions) {
+  console.log(divisions)
+  var divLinks="";
+  for (division in divisions){
+        if(!divisions[division].officeIndices) {
+    } else {
+    divLinks+= "<li><a href=\"#"+divisions[division].name.replace(/ /g,"_")+"\">"+divisions[division].name+"</a></li>";
+    }
+  }
+  return divLinks;
 }
 
 function tabs(official,id){
@@ -150,12 +158,18 @@ function formatAndAppend (data) {
   var officeName= "";
   var appendData = "";
   collapseId=0;
-  appendData+="<div class=\"current-location\"><h3>Elected officials for "+data.normalizedInput.city+", "+data.normalizedInput.state +"</div>"+"</div><div class=\"repDisplay\">";
+  $("#navSearch").append($("#searchForm"))
+  $(".pageTitle").remove()
+  $("#searchForm").attr("class", "navbar-form navbar-left")
+  appendData+="<div class=\"current-location\"><h3>Elected officials for "+data.normalizedInput.city+", "+data.normalizedInput.state +"</div>"+"</div>";
+    $("#levelOfGov").html(divTabs(data.divisions));
+  appendData+="<div class=\"repDisplay\">";
+
   for (division in data.divisions) {
     if(!data.divisions[division].officeIndices) {
     } else {
-    divTabs(data.divisions[division])
-    appendData +="<div class=\"division\" id=\""+data.divisions[division].name+"\"><hr class=\"division-hr\"><h1 class=\"div-title\">"+data.divisions[division].name.toUpperCase()+"</h1>";
+    
+    appendData +="<div class=\"division\" id=\""+data.divisions[division].name.replace(/ /g,"_")+"\"><hr class=\"division-hr\"><h1 class=\"div-title\">"+data.divisions[division].name.toUpperCase()+"</h1>";
     data.divisions[division].officeIndices.forEach(function(office){
       officeName = data.offices[office].name;
       data.offices[office].officialIndices.forEach(function(official){
