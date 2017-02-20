@@ -27,7 +27,6 @@ window.twttr = (function(d, s, id) {
 //store data from representative search. Google civic info API provides data!
 
 function getData (address) {
-  $(".repDisplay").remove()
   console.log(address);
   var key = "AIzaSyCZJ6S0JHvG9JwJWVK6H0ujFwBM0IXX0jw";
   var url = "https://www.googleapis.com/civicinfo/v2/representatives?address="+encodeURIComponent(address)+"&key="+key;
