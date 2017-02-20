@@ -161,9 +161,9 @@ function formatAndAppend (data) {
   $("#navSearch").append($("#searchForm"))
   $(".pageTitle").remove()
   $("#searchForm").attr("class", "navbar-form navbar-left")
-  appendData+="<div class=\"current-location\"><h3>Elected officials for "+data.normalizedInput.city+", "+data.normalizedInput.state +"</div>"+"</div>";
     $("#levelOfGov").html(divTabs(data.divisions));
   appendData+="<div class=\"repDisplay\">";
+  appendData+="<div class=\"current-location\"><h3>Elected officials for "+data.normalizedInput.city+", "+data.normalizedInput.state +"</div>"+"</div>";
 
   for (division in data.divisions) {
     if(!data.divisions[division].officeIndices) {
