@@ -154,7 +154,7 @@ return [tabs,tabPanes];
 
 //Utilizes data from google and helper functions to format data for display.
 function formatAndAppend (data) {
-  $(".repDisplay").remove()
+  $(".repDisplay").html("")
   console.log(data)
   var officeName= "";
   var appendData = "";
