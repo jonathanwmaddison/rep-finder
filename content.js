@@ -162,8 +162,8 @@ function formatAndAppend (data) {
   $(".pageTitle").remove()
   $("#searchForm").attr("class", "navbar-form navbar-left")
     $("#levelOfGov").html(divTabs(data.divisions));
-  appendData+="<div class=\"repDisplay\">";
-  appendData+="<div class=\"current-location\"><h3>Elected officials for "+data.normalizedInput.city+", "+data.normalizedInput.state +"</div>"+"</div>";
+  // appendData+="<div class=\"repDisplay\">";
+  appendData+="<div class=\"current-location\"><h3>Elected officials for "+data.normalizedInput.city+", "+data.normalizedInput.state +" </h3></div>";
 
   for (division in data.divisions) {
     if(!data.divisions[division].officeIndices) {
@@ -201,7 +201,7 @@ function formatAndAppend (data) {
   //close repDisplay
   appendData+="</div>" 
 
-  $(".container").append(appendData);
+  $(".repDisplay").append(appendData);
   $( ".news-search" ).on( "click", function() {
       getNews( $( this ).attr("id") );
       newsTracker[$( this ).attr("id")] = true;
