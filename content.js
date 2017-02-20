@@ -154,6 +154,7 @@ return [tabs,tabPanes];
 
 //Utilizes data from google and helper functions to format data for display.
 function formatAndAppend (data) {
+  $(".repDisplay").remove()
   console.log(data)
   var officeName= "";
   var appendData = "";
@@ -346,7 +347,6 @@ $(document).ready(function() {
 
   // event listener for rep search form
   $( "#zipForm" ).submit(function( event ) {
-      $(".repDisplay").remove()
     var zip = $("#zip" ).val()
     $("#zip" ).val("")
     getData(zip);
