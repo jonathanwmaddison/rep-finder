@@ -153,7 +153,8 @@ return [tabs,tabPanes];
 
 //Utilizes data from google and helper functions to format data for display.
 function formatAndAppend (data) {
-  $(".repDisplay").html("")
+  $(".repDisplay").remove()
+  $(".container").append("<div class=\"repDisplay\"></div>")
   console.log(data)
   var officeName= "";
   var appendData = "";
@@ -199,7 +200,7 @@ function formatAndAppend (data) {
     //close division
   }
   //close repDisplay
-  appendData+="</div>" 
+  // appendData+="</div>" 
 
   $(".repDisplay").append(appendData);
   $( ".news-search" ).on( "click", function() {
